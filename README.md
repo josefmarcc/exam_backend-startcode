@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/josefmarcc/exam_backend.svg?branch=master)](https://travis-ci.com/josefmarcc/exam_backend)
+[![Build Status](https://travis-ci.com/josefmarcc/exam_backend-startcode.svg?branch=master)](https://travis-ci.com/josefmarcc/exam_backend-startcode)
 
 *This project is meant as start code for upcoming projects which will use an endomondo like structure"*
 
