@@ -149,4 +149,14 @@ public class CourseResourceTest {
                 .statusCode(200);
     }
 
+    @Test
+    public void testGetCourseByName() {
+        System.out.println("Testing get Course by name");
+        given()
+                .contentType("application/json")
+                .when()
+                .get("/course/JavaScript").then()
+                .statusCode(200)
+                .assertThat().body("description", equalTo("Learn to code in JavaScript"));
+    }
 }

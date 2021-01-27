@@ -5,11 +5,13 @@ import DTO.UserDTO;
 import entities.Course;
 import entities.User;
 import errorhandling.DuplicateException;
+import errorhandling.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import security.errorhandling.AuthenticationException;
 
 public class CourseFacade {
 
@@ -66,4 +68,18 @@ public class CourseFacade {
         }
     }
 
+    public CourseDTO getCourseByName(String courseName) throws NotFoundException {
+        EntityManager em = emf.createEntityManager();
+        Course course;
+        try {
+            course = em.find(Course.class, courseName);
+            if (course == null) {
+                throw new NotFoundException("Cannot find course");
+            } else {
+                return new CourseDTO(course);
+            }
+        } finally {
+            em.close();
+        }
+    }
 }

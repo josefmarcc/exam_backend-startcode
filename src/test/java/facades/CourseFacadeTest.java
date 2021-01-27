@@ -7,6 +7,7 @@ package facades;
 
 import entities.Course;
 import errorhandling.DuplicateException;
+import errorhandling.NotFoundException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.Test;
@@ -69,4 +70,12 @@ public class CourseFacadeTest {
         facade.addCourse("Java", "Learn To code in Java");
         assertEquals(3, facade.getAllCourses().size(), "Expects three rows in the database");
     }
+
+    @Test
+    public void testGetCourse() throws NotFoundException {
+        String description = facade.getCourseByName("JavaScript").getDescription();
+        assertEquals("Learn to code in JS", description);
+
+    }
+
 }
