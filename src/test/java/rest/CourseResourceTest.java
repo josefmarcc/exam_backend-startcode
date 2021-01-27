@@ -68,7 +68,8 @@ public class CourseResourceTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            //Delete existing users and roles to get a "fresh" database
+            //Delete existing classentites, courses, users and roles to get a "fresh" database
+            em.createQuery("delete from ClassEntity").executeUpdate();
             em.createQuery("delete from Course").executeUpdate();
             em.createQuery("delete from User").executeUpdate();
             em.createQuery("delete from Role").executeUpdate();
@@ -158,5 +159,35 @@ public class CourseResourceTest {
                 .get("/course/JavaScript").then()
                 .statusCode(200)
                 .assertThat().body("description", equalTo("Learn to code in JavaScript"));
+    }
+
+    @Test
+    public void testAddClassToCourse() {
+        String courseName = "JavaScript";
+        int semester = 1;
+        int numberOfStudents = 20;
+        login("admin", "test");
+        String json = String.format("{semester: \"%s\", numberOfStudents: \"%s\", courseName: \"%s\"}", semester, numberOfStudents, courseName);
+        given().contentType("application/json")
+                .accept(ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .body(json)
+                .when()
+                .post("/course/addTo/class")
+                .then()
+                .statusCode(200);
+    }
+
+    // TODO
+    @Disabled
+    @Test
+    public void testGetClassBySemester() {
+        System.out.println("Testing get class by semester");
+        given()
+                .contentType("application/json")
+                .when()
+                .get("/course/getClass/1").then()
+                .statusCode(200)
+                .assertThat().body("numberOfStudents", equalTo("2"));
     }
 }

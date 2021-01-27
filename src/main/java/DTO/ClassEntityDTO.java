@@ -8,25 +8,16 @@ import entities.ClassEntity;
  */
 public class ClassEntityDTO {
 
-    private Integer id;
-
     private int semester;
 
     private int numberOfStudents;
 
+    private String courseName;
+
     public ClassEntityDTO(ClassEntity classEntity) {
-        this.id = classEntity.getId();
         this.semester = classEntity.getSemester();
         this.numberOfStudents = classEntity.getNumberOfStudents();
 
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public int getSemester() {
@@ -43,6 +34,14 @@ public class ClassEntityDTO {
 
     public void setNumberOfStudents(int numberOfStudents) {
         this.numberOfStudents = numberOfStudents;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
 }

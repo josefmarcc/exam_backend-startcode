@@ -5,6 +5,7 @@
  */
 package facades;
 
+import entities.ClassEntity;
 import entities.Course;
 import errorhandling.DuplicateException;
 import errorhandling.NotFoundException;
@@ -25,6 +26,7 @@ public class CourseFacadeTest {
     private static EntityManagerFactory emf;
     private static CourseFacade facade;
     private Course course1, course2;
+    private ClassEntity classEntity;
 
     public CourseFacadeTest() {
     }
@@ -44,9 +46,13 @@ public class CourseFacadeTest {
 
         try {
             em.getTransaction().begin();
+            em.createQuery("Delete from ClassEntity").executeUpdate();
             em.createQuery("Delete from Course").executeUpdate();
+            classEntity = new ClassEntity(1, 20);
+            classEntity.setCourse(course1);
             em.persist(course1);
             em.persist(course2);
+            em.persist(classEntity);
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -72,10 +78,23 @@ public class CourseFacadeTest {
     }
 
     @Test
-    public void testGetCourse() throws NotFoundException {
+    public void testGetCourseByName() throws NotFoundException {
         String description = facade.getCourseByName("JavaScript").getDescription();
         assertEquals("Learn to code in JS", description);
 
+    }
+
+    @Test
+    public void testAddClassToCourse() throws NotFoundException {
+        System.out.println("TESTING Name of Class entity after add");
+
+        facade.addClassToCourse(2, 20, course1.getCourseName());
+        assertEquals(20, facade.getClassBySemester(2).getNumberOfStudents());
+    }
+
+    @Test
+    public void testGetAllClasses() {
+        assertEquals(1, facade.getAllClasses().size(), "Expects one row in the database");
     }
 
 }

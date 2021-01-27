@@ -1,8 +1,10 @@
 package rest;
 
+import DTO.ClassEntityDTO;
 import DTO.CourseDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import entities.ClassEntity;
 import entities.Course;
 import errorhandling.DuplicateException;
 import errorhandling.NotFoundException;
@@ -50,10 +52,11 @@ public class CourseResource {
     @Path("add")
     @RolesAllowed("admin")
     public String addCourse(String course) throws DuplicateException {
+        String thisuser = securityContext.getUserPrincipal().getName();
         Course c = GSON.fromJson(course, Course.class);
         CF.addCourse(c.getCourseName(), c.getDescription());
 
-        return "Course: " + c.getCourseName() + " Added";
+        return "Course: " + c.getCourseName() + " Added by " + thisuser;
     }
 
     @GET
@@ -63,6 +66,28 @@ public class CourseResource {
     public String getCourseByName(@PathParam("courseName") String courseName) throws NotFoundException {
         CourseDTO course = CF.getCourseByName(courseName);
         return GSON.toJson(course);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Path("/getClass/{semester}")
+    public String getClassBySemester(@PathParam("semester") int semester) throws NotFoundException {
+        ClassEntityDTO classEntityDTO = CF.getClassBySemester(semester);
+        return GSON.toJson(classEntityDTO);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Path("/addTo/class")
+    @RolesAllowed("admin")
+    public String addClassToCourse(String classEntity) throws NotFoundException {
+        String thisuser = securityContext.getUserPrincipal().getName();
+        ClassEntityDTO classEntityDTO = GSON.fromJson(classEntity, ClassEntityDTO.class);
+        CF.addClassToCourse(classEntityDTO.getSemester(), classEntityDTO.getNumberOfStudents(), classEntityDTO.getCourseName());
+
+        return "Added " + classEntityDTO.getCourseName() + " to " + classEntityDTO.getSemester() + " By " + thisuser;
     }
 
 }

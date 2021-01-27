@@ -81,7 +81,6 @@ public class UserFacade {
         }
     }
 
-    // tilføj noget hvis brugeren allerede eksisterer
     public void addUser(String userName, String password) throws DuplicateException {
         EntityManager em = emf.createEntityManager();
         User user = em.find(User.class, userName);
