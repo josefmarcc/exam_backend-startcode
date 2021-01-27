@@ -136,6 +136,24 @@ public class CourseFacade {
         }
     }
 
+    public void deleteCourse(String courseName) throws NotFoundException {
+        EntityManager em = emf.createEntityManager();
+        Course course = em.find(Course.class, courseName);
+        if (course == null) {
+            System.out.println("Course er tom");
+            throw new NotFoundException("Course input missing");
+        } else {
+
+            try {
+                em.getTransaction().begin();
+                em.remove(course);
+                em.getTransaction().commit();
+            } finally {
+                em.close();
+            }
+        }
+    }
+
     public CourseDTO editCourse(CourseDTO c) throws NotFoundException {
         if ((c.getCourseName().length() == 0)) {
             throw new NotFoundException("Course input missing");

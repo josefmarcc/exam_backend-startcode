@@ -1,14 +1,15 @@
 package entities;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -29,13 +30,29 @@ public class ClassEntity implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL)
     private Course course;
 
+    @ManyToMany
+    private List<Teacher> teacherList = new ArrayList<>();
+
     public ClassEntity(int semester, int numberOfStudents) {
         this.id = id;
         this.semester = semester;
         this.numberOfStudents = numberOfStudents;
+        this.teacherList = new ArrayList<>();
     }
 
     public ClassEntity() {
+    }
+
+    public List<Teacher> getTeacherList() {
+        return teacherList;
+    }
+
+    public void setTeacherList(List<Teacher> teacherList) {
+        this.teacherList = teacherList;
+    }
+
+    public void addTeacher(Teacher teacher) {
+        teacherList.add(teacher);
     }
 
     public int getSemester() {
