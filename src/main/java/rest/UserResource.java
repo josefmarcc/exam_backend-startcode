@@ -2,7 +2,6 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import entities.Role;
 import entities.User;
 import errorhandling.DuplicateException;
 import facades.UserFacade;
@@ -82,40 +81,6 @@ public class UserResource {
         UserFacade.getUserFacade(EMF).addUser(u.getUserName(), u.getUserPass());
 
         return "User added";
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("populate")
-    public String populateDB() {
-        EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
-        EntityManager em = emf.createEntityManager();
-        User user = new User("user", "kode123");
-        User admin = new User("admin", "kodeord");
-        User both = new User("user_admin", "kodetest");
-
-        if (admin.getUserPass().equals("test") || user.getUserPass().equals("test") || both.getUserPass().equals("test")) {
-            throw new UnsupportedOperationException("You have not changed the passwords");
-        }
-
-        em.getTransaction().begin();
-        Role userRole = new Role("user");
-        Role adminRole = new Role("admin");
-        user.addRole(userRole);
-        admin.addRole(adminRole);
-        both.addRole(userRole);
-        both.addRole(adminRole);
-        em.persist(userRole);
-        em.persist(adminRole);
-        em.persist(user);
-        em.persist(admin);
-        em.persist(both);
-        em.getTransaction().commit();
-        System.out.println("PW: " + user.getUserPass());
-        System.out.println("Testing user with OK password: " + user.verifyPassword("kode"));
-        System.out.println("Testing user with wrong password: " + user.verifyPassword("test1"));
-        System.out.println("Created TEST Users");
-        return "DB is populated";
     }
 
 }
