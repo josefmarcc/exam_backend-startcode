@@ -136,4 +136,27 @@ public class CourseFacade {
         }
     }
 
+    public CourseDTO editCourse(CourseDTO c) throws NotFoundException {
+        if ((c.getCourseName().length() == 0)) {
+            throw new NotFoundException("Course input missing");
+        }
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            em.getTransaction().begin();
+
+            Course course = em.find(Course.class, c.getCourseName());
+            if (course == null) {
+                throw new NotFoundException(String.format("Course with course name: (%s) not found", c.getCourseName()));
+            } else {
+                course.setCourseName(c.getCourseName());
+                course.setDescription(c.getDescription());
+            }
+            em.getTransaction().commit();
+            return new CourseDTO(course);
+        } finally {
+            em.close();
+        }
+    }
+
 }

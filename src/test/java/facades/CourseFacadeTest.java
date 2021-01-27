@@ -5,6 +5,7 @@
  */
 package facades;
 
+import DTO.CourseDTO;
 import entities.ClassEntity;
 import entities.Course;
 import errorhandling.DuplicateException;

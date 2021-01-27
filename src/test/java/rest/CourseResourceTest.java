@@ -181,6 +181,24 @@ public class CourseResourceTest {
     // TODO
     @Disabled
     @Test
+    public void testUpdateCourse() {
+        String courseName = "Testing";
+        String description = "Bla bla";
+        login("admin", "test");
+        String json = String.format("{courseName: \"%s\", description: \"%s\"}", courseName, description);
+        given().contentType("application/json")
+                .accept(ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .body(json)
+                .when()
+                .put("/course/update/JavaScript")
+                .then()
+                .statusCode(200);
+    }
+
+    // TODO
+    @Disabled
+    @Test
     public void testGetClassBySemester() {
         System.out.println("Testing get class by semester");
         given()

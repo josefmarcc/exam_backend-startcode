@@ -18,6 +18,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
@@ -97,6 +98,17 @@ public class CourseResource {
         CF.addClassToCourse(classEntityDTO.getSemester(), classEntityDTO.getNumberOfStudents(), classEntityDTO.getCourseName());
 
         return "Added " + classEntityDTO.getCourseName() + " to " + classEntityDTO.getSemester() + " By " + thisuser;
+    }
+
+    @PUT
+    @Path("/update/{course}")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    @RolesAllowed("admin")
+    public String updateCourse(@PathParam("course") String course) throws NotFoundException {
+        CourseDTO cDTO = GSON.fromJson(course, CourseDTO.class);
+        CourseDTO cNew = CF.editCourse(cDTO);
+        return GSON.toJson(cNew);
     }
 
 }
