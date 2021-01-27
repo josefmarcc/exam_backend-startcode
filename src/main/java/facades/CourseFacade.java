@@ -53,10 +53,9 @@ public class CourseFacade {
     public void addClassToCourse(int semester, int numOfStudents, String courseName) throws NotFoundException {
         EntityManager em = emf.createEntityManager();
         Course course = em.find(Course.class, courseName);
-        ClassEntity classEntity = em.find(ClassEntity.class, semester);
 
-        if (course == null || classEntity != null) {
-            throw new NotFoundException("Cannot find course or Class already exisist.");
+        if (course == null) {
+            throw new NotFoundException("Cannot find course");
         } else {
 
             try {
@@ -103,16 +102,18 @@ public class CourseFacade {
         }
     }
 
-    public ClassEntityDTO getClassBySemester(int semester) throws NotFoundException {
+    public List<ClassEntityDTO> getClassBySemester(int semester) {
         EntityManager em = emf.createEntityManager();
-        ClassEntity classEntity;
         try {
-            classEntity = em.find(ClassEntity.class, semester);
-            if (classEntity == null) {
-                throw new NotFoundException("Cannot find class");
-            } else {
-                return new ClassEntityDTO(classEntity);
+            TypedQuery<ClassEntity> q1
+                    = em.createQuery("SELECT s FROM ClassEntity s WHERE s.semester LIKE :semester", ClassEntity.class);
+            List<ClassEntity> classEntityList = q1.setParameter("semester", semester).getResultList();
+            List<ClassEntityDTO> classListDTO = new ArrayList();
+            for (ClassEntity classEntity : classEntityList) {
+                ClassEntityDTO classEntityDTO = new ClassEntityDTO(classEntity);
+                classListDTO.add(classEntityDTO);
             }
+            return classListDTO;
         } finally {
             em.close();
         }
@@ -134,4 +135,5 @@ public class CourseFacade {
             em.close();
         }
     }
+
 }

@@ -46,6 +46,15 @@ public class CourseResource {
         return GSON.toJson(courseList);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/classes")
+    @RolesAllowed("admin")
+    public String allClasses() {
+        List<ClassEntityDTO> classEntityList = CF.getAllClasses();
+        return GSON.toJson(classEntityList);
+    }
+
     @POST
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
@@ -73,7 +82,7 @@ public class CourseResource {
     @Consumes({MediaType.APPLICATION_JSON})
     @Path("/getClass/{semester}")
     public String getClassBySemester(@PathParam("semester") int semester) throws NotFoundException {
-        ClassEntityDTO classEntityDTO = CF.getClassBySemester(semester);
+        List<ClassEntityDTO> classEntityDTO = CF.getClassBySemester(semester);
         return GSON.toJson(classEntityDTO);
     }
 

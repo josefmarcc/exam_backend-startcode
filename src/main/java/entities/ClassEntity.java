@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -18,8 +19,9 @@ public class ClassEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
-    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     private int semester;
 
     private int numberOfStudents;
@@ -28,6 +30,7 @@ public class ClassEntity implements Serializable {
     private Course course;
 
     public ClassEntity(int semester, int numberOfStudents) {
+        this.id = id;
         this.semester = semester;
         this.numberOfStudents = numberOfStudents;
     }
@@ -57,6 +60,14 @@ public class ClassEntity implements Serializable {
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
 }

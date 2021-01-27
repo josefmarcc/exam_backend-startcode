@@ -1,6 +1,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -25,11 +26,12 @@ public class Course implements Serializable {
     private String description;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    List<ClassEntity> classList;
+    List<ClassEntity> classList = new ArrayList<>();
 
     public Course(String courseName, String description) {
         this.courseName = courseName;
         this.description = description;
+        this.classList = new ArrayList<>();
     }
 
     public Course() {
